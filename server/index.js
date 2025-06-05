@@ -2,21 +2,26 @@ const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const { Server } = require('socket.io');
+const authRoutes = require('./routes/authRoutes');
+require('dotenv').config();
+const connectDB = require('./db');
+
 const app = express();
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: {
-    origin: '*', 
+    origin: '*',
     methods: ['GET', 'POST']
   }
 });
 
-require('dotenv').config();
-const connectDB = require('./db');
 connectDB();
 
 app.use(cors());
 app.use(express.json());
+
+app.use('/api/auth', authRoutes);
 
 app.get('/', (req, res) => {
   res.send('Jamoveo server is running!');
