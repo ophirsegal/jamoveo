@@ -6,6 +6,7 @@ import SignupPage from "./pages/SignupPage";
 import AdminMainPage from "./pages/AdminMainPage";
 import PlayerMainPage from "./pages/PlayerMainPage";
 import LivePage from "./pages/LivePage";
+import ResultsPage from "./pages/ResultsPage";
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/admin" element={<AdminMainPage />} />
         <Route path="/player" element={<PlayerMainPage />} />
         <Route path="/live" element={<LivePage />} />
+        <Route path="/results" element={<ResultsPage />} />
       </Routes>
     </Router>
   );

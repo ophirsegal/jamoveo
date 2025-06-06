@@ -1,0 +1,16 @@
+.live-bg {
+    background: linear-gradient(135deg, #111, #333);
+  }
+  
+  .lyrics {
+    white-space: pre-wrap;
+    font-size: 1.2rem;
+    line-height: 1.6;
+  }
+  
+  .chords {
+    font-family: monospace;
+    font-size: 1.1rem;
+    line-height: 1.5;
+  }
+  
