@@ -1,48 +1,46 @@
 .login-bg {
-  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  background: radial-gradient(circle at center, #203a43, #2c5364);
   min-height: 100vh;
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
 }
 
 .login-card {
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: #111;
   border-radius: 12px;
-  padding: 30px;
-  max-width: 400px;
+  padding: 2rem;
   width: 100%;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-  color: white;
+  max-width: 400px;
 }
 
 .login-card h2 {
-  color: white;
+  color: #fff;
   font-weight: bold;
-  text-align: center;
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
-.login-card label,
-.login-card p {
-  color: white;
+.form-label {
+  color: #fff;
 }
 
-.login-card .form-control {
+.form-control,
+.form-select {
   background-color: #fff;
   color: #000;
 }
 
-.login-card .btn-success {
-  background-color: #28a745;
-  border: none;
-  font-weight: bold;
+.btn-success {
+  background-color: #198754;
+  border-color: #198754;
 }
 
-.login-card .text-info {
-  color: #17a2b8 !important;
+.btn-success:hover {
+  background-color: #157347;
+  border-color: #146c43;
 }
 
-.pointer {
+.text-info.pointer {
   cursor: pointer;
 }

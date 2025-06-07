@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
-import "../styles/Results.css"; // ניצור אותו תכף
+import "../styles/Results.css";
+import socket from "../api/socket";
 
 function ResultsPage() {
   const navigate = useNavigate();
@@ -7,6 +8,7 @@ function ResultsPage() {
 
   const handleSelectSong = (song) => {
     localStorage.setItem("selectedSong", JSON.stringify(song));
+    socket.emit("send-song", song); 
     navigate("/live");
   };
 
@@ -17,11 +19,7 @@ function ResultsPage() {
         {results.map((song) => (
           <div className="col-md-4" key={song.id}>
             <div className="card h-100 bg-dark text-white shadow song-card">
-              <img
-                src={song.image}
-                alt={song.title}
-                className="card-img-top"
-              />
+              <img src={song.image} alt={song.title} className="card-img-top" />
               <div className="card-body d-flex flex-column justify-content-between">
                 <div>
                   <h5 className="card-title">{song.title}</h5>

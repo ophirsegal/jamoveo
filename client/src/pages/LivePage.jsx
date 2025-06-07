@@ -1,63 +1,78 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import socket from "../api/socket";
 import "../styles/Live.css";
 
 function LivePage() {
+  const [song, setSong] = useState(null);
+  const [scrolling, setScrolling] = useState(false);
+  const instrument = localStorage.getItem("instrument");
+  const role = localStorage.getItem("role");
   const navigate = useNavigate();
-  const [autoScroll, setAutoScroll] = useState(false);
-
-  const song = JSON.parse(localStorage.getItem("selectedSong")) || {
-    title: "Unknown",
-    artist: "Unknown",
-    lyrics: "No lyrics available.",
-    chords: "No chords.",
-  };
-
-  const role = localStorage.getItem("role") || "player";
-  const instrument = localStorage.getItem("instrument") || "";
 
   const isSinger = instrument === "vocals";
-  const isAdmin = role === "admin";
 
   useEffect(() => {
-    if (autoScroll) {
-      const interval = setInterval(() => {
-        window.scrollBy({ top: 1, behavior: "smooth" });
-      }, 100);
-      return () => clearInterval(interval);
-    }
-  }, [autoScroll]);
+    const saved = localStorage.getItem("selectedSong");
+    if (saved) setSong(JSON.parse(saved));
 
-  const handleQuit = () => {
-    localStorage.removeItem("selectedSong");
-    navigate(isAdmin ? "/admin" : "/player");
-  };
+    socket.on("receive-song", (data) => {
+      if (data) {
+        setSong(data);
+        localStorage.setItem("selectedSong", JSON.stringify(data));
+      } else {
+        localStorage.removeItem("selectedSong");
+        navigate(role === "admin" ? "/admin" : "/player");
+      }
+    });
+
+    return () => socket.off("receive-song");
+  }, [navigate, role]);
+
+  useEffect(() => {
+    let interval;
+    if (scrolling) {
+      interval = setInterval(() => window.scrollBy(0, 1), 50);
+    }
+    return () => clearInterval(interval);
+  }, [scrolling]);
+
+  if (!song) return <p className="text-white">Waiting for song...</p>;
 
   return (
-    <div className="live-bg text-white p-5 vh-100 overflow-auto">
-      <h1 className="display-4 fw-bold">{song.title}</h1>
-      <h4 className="text-secondary mb-4">By {song.artist}</h4>
-
-      {!isSinger && (
-        <pre className="chords mb-4 bg-dark p-3 rounded">{song.chords}</pre>
-      )}
-
-      <pre className="lyrics bg-secondary p-3 rounded">{song.lyrics}</pre>
-
-      <div className="position-fixed bottom-0 end-0 m-4 d-flex gap-2">
-        <button
-          className="btn btn-outline-info"
-          onClick={() => setAutoScroll(!autoScroll)}
-        >
-          {autoScroll ? "Stop Scroll" : "Start Scroll"}
-        </button>
-
-        {isAdmin && (
-          <button className="btn btn-danger" onClick={handleQuit}>
-            Quit Session
-          </button>
-        )}
+    <div className="live-page text-white p-4">
+      <h2>{song.title}</h2>
+      <h4 className="text-muted">{song.artist}</h4>
+      <div className="mt-4">
+        {song.lyrics.map((line, idx) => (
+          <p key={idx} className="fs-4">
+            {line.map((part, i) => (
+              <span key={i} className="me-2">
+                {part.lyrics}
+                {!isSinger && part.chords && (
+                  <span className="text-success ms-1">({part.chords})</span>
+                )}
+              </span>
+            ))}
+          </p>
+        ))}
       </div>
+
+      <button className="btn btn-outline-light mt-4 me-3" onClick={() => setScrolling(!scrolling)}>
+        {scrolling ? "Stop Scroll" : "Start Scroll"}
+      </button>
+
+
+      {role === "admin" && (
+        <button
+          className="btn btn-danger mt-4"
+          onClick={() => {
+            socket.emit("send-song", null); 
+          }}
+        >
+          Quit
+        </button>
+      )}
     </div>
   );
 }

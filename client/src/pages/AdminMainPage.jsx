@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import songsList from "../components/songsData.json";
 import "../styles/Admin.css";
 
 function AdminMainPage() {
@@ -8,44 +9,30 @@ function AdminMainPage() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    if (!query.trim()) return;
 
-    
-    const dummyResults = [
-      {
-        id: 1,
-        title: "Imagine",
-        artist: "John Lennon",
-        image: "https://upload.wikimedia.org/wikipedia/en/1/1b/Imagine_%28John_Lennon_album%29.jpg",
-        lyrics: "Imagine there's no heaven...",
-        chords: "C  F  G  C"
-      },
-      {
-        id: 2,
-        title: "Let it be",
-        artist: "The Beatles",
-        image: "https://upload.wikimedia.org/wikipedia/en/2/25/LetItBe.jpg",
-        lyrics: "When I find myself in times of trouble...",
-        chords: "G  D  Em  C"
-      }
-    ];
+    const filtered = songsList.filter((song) =>
+      song.title.toLowerCase().includes(query.toLowerCase()) ||
+      song.artist.toLowerCase().includes(query.toLowerCase())
+    );
 
-    localStorage.setItem("searchResults", JSON.stringify(dummyResults));
+    localStorage.setItem("searchResults", JSON.stringify(filtered));
     navigate("/results");
   };
 
   return (
-    <div className="admin-bg d-flex flex-column justify-content-center align-items-center vh-100 text-white p-4">
-      <h1 className="mb-4">Search for a Song</h1>
-      <form onSubmit={handleSearch} className="w-100" style={{ maxWidth: "500px" }}>
+    <div className="admin-bg text-white d-flex flex-column align-items-center justify-content-center vh-100">
+      <h1 className="mb-4">Search any song...</h1>
+      <form onSubmit={handleSearch} className="w-75">
         <input
           type="text"
-          className="form-control form-control-lg mb-3"
-          placeholder="Enter song or artist name"
+          placeholder="Enter song title or artist"
+          className="form-control form-control-lg"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
         />
-        <button type="submit" className="btn btn-primary w-100">Search</button>
+        <button type="submit" className="btn btn-light mt-3 w-100">
+          Search
+        </button>
       </form>
     </div>
   );
