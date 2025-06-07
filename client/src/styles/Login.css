@@ -1,12 +1,48 @@
 .login-bg {
-    background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
-    height: 100vh;
-  }
-  
-  .login-card {
-    width: 100%;
-    max-width: 400px;
-    background-color: rgba(0, 0, 0, 0.75);
-    border: none;
-    border-radius: 12px;
-  }  
+  background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.login-card {
+  background-color: rgba(0, 0, 0, 0.85);
+  border-radius: 12px;
+  padding: 30px;
+  max-width: 400px;
+  width: 100%;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  color: white;
+}
+
+.login-card h2 {
+  color: white;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.login-card label,
+.login-card p {
+  color: white;
+}
+
+.login-card .form-control {
+  background-color: #fff;
+  color: #000;
+}
+
+.login-card .btn-success {
+  background-color: #28a745;
+  border: none;
+  font-weight: bold;
+}
+
+.login-card .text-info {
+  color: #17a2b8 !important;
+}
+
+.pointer {
+  cursor: pointer;
+}

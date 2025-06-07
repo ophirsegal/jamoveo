@@ -1,0 +1,19 @@
+.results-bg {
+    background-color: #121212;
+    min-height: 100vh;
+    color: white;
+  }
+  
+  .result-card {
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    padding: 1rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+    cursor: pointer;
+  }
+  
+  .result-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 20px rgba(255, 255, 255, 0.1);
+  }
+  
