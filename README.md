@@ -1,70 +1,90 @@
-# JaMoveo
-# JaMoveo – Real-Time Rehearsal Web App
 
-JaMoveo is a full-stack web application designed to enhance musical rehearsals by allowing musicians to connect via their phones, register with their instrument, and join live rehearsal sessions.
+# JaMoveo – Web Rehearsal App
+
+This project was developed as part of Moveo’s coding challenge. It is a web app designed to support real-time music rehearsals by connecting musicians and displaying synchronized lyrics and chords.
 
 ## Features
 
-- **Signup & Login**: Users can sign up with their username, password, and instrument. Admins can register from a separate page.
-- **Role-Based Navigation**: Admin users can create sessions and broadcast songs; players are directed to a waiting screen and then see the song content when selected.
-- **Song Search**: Admins can search songs in English or Hebrew by title or artist.
-- **Live Display**: All users see song lyrics; players with instruments see chords, singers see only lyrics.
-- **Auto Scroll**: Toggle slow scrolling during live display.
-- **Responsive UI**: High contrast and large font for visibility in smoky environments.
-- **Real-Time Sync**: Built with Socket.IO for real-time updates across all users.
+- **Signup & Login**:
+  - Users can register with a username, password, and instrument.
+  - Admins can sign up and manage the session.
+  - Authenticated users are redirected based on their role.
+
+- **Admin Functionality**:
+  - Admins can search for a song by name (in English or Hebrew).
+  - Matching songs are displayed with their title, artist, and image.
+  - Admin can start a session that pushes the selected song to all connected clients.
+
+- **Live Session**:
+  - Players see lyrics, with or without chords based on their role.
+  - Auto-scroll and contrast options available for easy readability.
+  - Admin can quit the session at any time.
 
 ## Tech Stack
 
-- **Frontend**: React, Bootstrap, CSS
-- **Backend**: Node.js, Express
-- **Database**: MongoDB (with Mongoose)
-- **WebSockets**: Socket.IO
-- **Authentication**: JWT + bcrypt
-- **Deployment**: Localhost (or replace with deployed URL)
+- **Frontend**: React.js (React Router, Bootstrap)
+- **Backend**: Node.js (Express)
+- **Database**: MongoDB (via Mongoose)
+- **Real-Time**: Socket.IO
+- **Deployment**: Railway (backend), Vercel (frontend)
 
-## Setup Instructions
+## How to Run Locally
 
-### Backend
+### 1. Clone the repo
+```bash
+git clone https://github.com/yourusername/jamoveo.git
+cd jamoveo
+```
 
-1. Navigate to the `server/` directory.
-2. Create a `.env` file with the following:
-    ```
-    MONGO_URI=your_mongodb_connection_string
-    JWT_SECRET=your_jwt_secret
-    ```
-3. Run the server:
-    ```bash
-    npm install
-    npm start
-    ```
+### 2. Setup Server
+```bash
+cd server
+npm install
+npm start
+```
 
-### Frontend
+### 3. Setup Client
+```bash
+cd ../client
+npm install
+npm start
+```
 
-1. Navigate to the root project directory.
-2. Run the frontend:
-    ```bash
-    npm install
-    npm start
-    ```
+## Environment Variables and Deployment Notes
 
-## User Instructions
+To avoid hardcoding the backend URL in the client code, we use a `.env` file to store environment variables.
 
-- **Regular User**:
-  - Sign up via `/signup`
-  - Login via `/`
-  - Wait for admin to start a session and view songs in real-time
+### Client `.env` Setup
 
-- **Admin User**:
-  - Sign up via `/admin-signup`
-  - Login as `admin` via `/`
-  - Search and select songs to broadcast
+In the `/client` folder, create a `.env` file and define:
 
-## Notes
+```
+REACT_APP_API_URL=https://tender-endurance-production-13a0.up.railway.app/api
+```
 
-- All songs are preloaded from a local JSON file (`songsData.json`).
-- Roles are saved in `localStorage` to determine view behavior.
-- Ensure both server and client are running for real-time features to work.
+Then, in `client/src/api/api.js`, use:
 
-## Author
+```js
+import axios from "axios";
 
-Developed by Ophir Segal as part of a Moveo coding challenge.
+const api = axios.create({
+  baseURL: process.env.REACT_APP_API_URL,
+});
+
+export default api;
+```
+
+Make sure not to commit `.env` to GitHub – it should be listed in `.gitignore`.
+
+### Vercel Environment Variable
+
+To make it work in production (Vercel):
+
+1. Go to your project’s settings in [Vercel](https://vercel.com).
+2. Navigate to “Environment Variables”.
+3. Add:
+   - Key: `REACT_APP_API_URL`
+   - Value: `https://tender-endurance-production-13a0.up.railway.app/api`
+4. Save and trigger a redeploy.
+
+This allows secure and flexible configuration between development and production environments.
