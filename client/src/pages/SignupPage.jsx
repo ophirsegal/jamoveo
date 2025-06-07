@@ -16,7 +16,6 @@ function SignupPage() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // אמור להתחבר לשרת בהמשך
     navigate("/");
   };
 
