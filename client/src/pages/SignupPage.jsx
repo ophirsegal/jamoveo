@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/api";
 import "../styles/Login.css";
 
 function SignupPage() {
@@ -15,32 +14,28 @@ function SignupPage() {
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    try {
-      const res = await api.post("/signup", formData);
-      localStorage.setItem("role", res.data.role || "user");
-      localStorage.setItem("instrument", formData.instrument);
-      navigate("/");
-    } catch (err) {
-      alert("Signup failed. Try a different username.");
-    }
+    // אמור להתחבר לשרת בהמשך
+    navigate("/");
   };
 
   return (
-    <div className="login-bg d-flex align-items-center justify-content-center vh-100">
-      <div className="card login-card shadow-lg p-4 text-white">
-        <h2 className="text-center mb-4">Sign Up to JaMoveo</h2>
+    <div className="login-bg">
+      <div className="login-card">
+        <h2>Sign Up to JaMoveo</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label>Username</label>
             <input
               name="username"
+              type="text"
               className="form-control"
               onChange={handleChange}
               required
             />
           </div>
+
           <div className="mb-3">
             <label>Password</label>
             <input
@@ -51,6 +46,7 @@ function SignupPage() {
               required
             />
           </div>
+
           <div className="mb-4">
             <label>Instrument</label>
             <select
@@ -67,12 +63,13 @@ function SignupPage() {
               <option value="bass">Bass</option>
             </select>
           </div>
+
           <button className="btn btn-success w-100">Sign Up</button>
         </form>
-        <p className="text-center mt-3">
+        <p className="text-center mt-3 small">
           Already have an account?{" "}
           <span
-            className="text-info pointer"
+            className="text-info fw-bold pointer"
             onClick={() => navigate("/")}
           >
             Login
