@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api";
 import "../styles/Login.css";
 
 function SignupPage() {
@@ -14,15 +15,28 @@ function SignupPage() {
   const handleChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    navigate("/");
+    try {
+      const res = await api.post("/auth/signup", formData);
+
+      localStorage.setItem("role", res.data.user.role);
+      localStorage.setItem("instrument", res.data.user.instrument);
+
+      navigate(res.data.user.role === "admin" ? "/admin" : "/player");
+    } catch (err) {
+      console.error("Signup failed:", err.response?.data || err.message);
+      alert(err.response?.data?.message || "Signup failed. Try again.");
+    }
   };
 
   return (
-    <div className="login-bg">
-      <div className="login-card">
-        <h2>Sign Up to JaMoveo</h2>
+    <div className="login-bg d-flex align-items-center justify-content-center vh-100">
+      <div
+        className="login-card bg-dark text-white p-4"
+        style={{ borderRadius: "16px", width: "100%", maxWidth: "400px" }}
+      >
+        <h2 className="text-center mb-4">Sign Up to JaMoveo</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
             <label>Username</label>
@@ -65,10 +79,12 @@ function SignupPage() {
 
           <button className="btn btn-success w-100">Sign Up</button>
         </form>
+
         <p className="text-center mt-3 small">
           Already have an account?{" "}
           <span
             className="text-info fw-bold pointer"
+            style={{ cursor: "pointer" }}
             onClick={() => navigate("/")}
           >
             Login

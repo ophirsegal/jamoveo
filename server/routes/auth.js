@@ -6,7 +6,14 @@ const User = require('../models/User');
 const router = express.Router();
 
 router.post('/signup', async (req, res) => {
+  console.log("Signup request received:", req.body); 
+
   const { username, password, instrument, role } = req.body;
+
+
+  if (!username || !password || !instrument) {
+    return res.status(400).json({ message: 'Missing required fields' });
+  }
 
   try {
     const existingUser = await User.findOne({ username });
@@ -24,7 +31,23 @@ router.post('/signup', async (req, res) => {
     });
 
     await newUser.save();
-    res.status(201).json({ message: 'User created successfully' });
+
+    const token = jwt.sign(
+      { id: newUser._id, role: newUser.role },
+      process.env.JWT_SECRET || 'defaultSecretKey',
+      { expiresIn: '2h' }
+    );
+
+    res.status(201).json({
+      message: 'User created successfully',
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        instrument: newUser.instrument,
+        role: newUser.role,
+      },
+      token,
+    });
   } catch (error) {
     console.error('Signup error:', error);
     res.status(500).json({ message: 'Signup failed' });
