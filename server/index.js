@@ -4,6 +4,7 @@ const cors = require("cors");
 const socketIo = require("socket.io");
 const mongoose = require("mongoose");
 require("dotenv").config();
+require("./db")();
 
 const authRoutes = require("./routes/auth");
 
