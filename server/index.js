@@ -4,13 +4,15 @@ const cors = require("cors");
 const socketIo = require("socket.io");
 require("dotenv").config();
 require("./db")(); 
+
 const authRoutes = require("./routes/auth");
 
 const app = express();
 const server = http.createServer(app);
+
 const io = socketIo(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: "*", 
     methods: ["GET", "POST"],
   },
 });
@@ -19,6 +21,11 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+
+app.get("/", (req, res) => {
+  res.send("🚀 Jamoveo server is up and running!");
+});
+
 
 io.on("connection", (socket) => {
   console.log("New client connected:", socket.id);
