@@ -18,7 +18,7 @@ function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/api/auth/signup", formData);
+      const res = await api.post("/signup", formData);
 
       localStorage.setItem("role", res.data.user.role);
       localStorage.setItem("instrument", res.data.user.instrument);
