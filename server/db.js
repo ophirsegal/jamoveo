@@ -6,8 +6,6 @@ const connectDB = async () => {
     console.log("Loaded MONGO_URI:", uri);
 
     await mongoose.connect(uri, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
       serverSelectionTimeoutMS: 10000,
     });
 
