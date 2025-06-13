@@ -18,7 +18,7 @@ function SignupPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await api.post("/signup", formData);
+      const res = await api.post("/signup", formData); 
 
       localStorage.setItem("role", res.data.user.role);
       localStorage.setItem("instrument", res.data.user.instrument);
@@ -83,7 +83,7 @@ function SignupPage() {
         <p className="text-center mt-3 small">
           Already have an account?{" "}
           <span
-            className="text-info fw-bold pointer"
+            className="text-info fw-bold"
             style={{ cursor: "pointer" }}
             onClick={() => navigate("/")}
           >
